@@ -1,7 +1,7 @@
-# The SG Engineering Light
+# The Light
 
-This guide explains how to set up a Flask application on a Raspberry Pi to control a TP-Link smart bulb based on Slack events.  Initial purpose is to
-indicate progress of deployments to servers.
+This project is created with a Flask application on a Raspberry Pi to control a TP-Link smart bulb based on Slack events.  Initial purpose is to
+indicate progress of deployments to servers.  Facilitating communication through light.
 
 ## Setting Up Project
 
