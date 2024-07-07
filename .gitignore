@@ -162,4 +162,4 @@ cython_debug/
 # Project
 venv/
 device_cache.json
-
+.DS_Store
