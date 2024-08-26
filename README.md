@@ -9,21 +9,21 @@ indicate progress of deployments to servers.  Facilitating communication through
 
 - Raspberry Pi with Raspbian OS
 - Python 3 and pip installed
-- Pythong Virtual Env
+- Python Virtual Env
     ```sh
     pip3 install virtualenv
     ```
 - TP-Link Kasa smart bulb
 - Slack workspace and app
-- Ngrok installed
+- Ngrok for local public availability using WAF for whitelisting
 
-## Quickstart to Get Running:
+## Quickstart to get started:
 - git clone going-light repo
 - `cd going-light`
-- `touch device_cache.json` - file used to store information about the bulb minimizing checks
-- python3 -m venv venv
-- source venv/bin/activate
-- pip install -r requirements.txt
+- `touch device_cache.json` - file used to store information about the bulb minimizing health checks
+- `python3 -m venv venv`
+- `source venv/bin/activate`
+- `pip install -r requirements.txt`
 
 # Detailed Steps
 ## Step 1: Environment Setup
@@ -64,25 +64,23 @@ python discover_devices.py
 
 Note down the alias of the smart bulb you want to control.
 
-## Step 2: Run Flask Application
+Update alias of light bulb in app.py
 
-### 2.0 Update Alias
+## Step 3: Run Flask Application
 
-Update alias in app.py from Step 2
-
-### 4.1 Activate Virtual Environment
+### 3.1 Activate Virtual Environment
 
 ```sh
 source venv/bin/activate
 ```
 
-### 4.2 Run Flask Application
+### 3.2 Run Flask Application
 
 ```sh
 python app.py
 ```
 
-### 4.3 Start Ngrok
+### 3.3 Start Ngrok
 
 Open a new terminal and start Ngrok to expose your Flask application:
 
@@ -90,14 +88,14 @@ Open a new terminal and start Ngrok to expose your Flask application:
 ngrok http 5000
 ```
 
-### 4.4 Update Slack Event Subscription
+### 3.4 Update Slack Event Subscription
 
 1. Go to your Slack app settings.
 2. In the "Event Subscriptions" section, set the "Request URL" to the Ngrok URL, for example, `https://abcd1234.ngrok.io/slack/events`.
 3. Save the changes. Slack will send a verification request to your endpoint.
 4. Once the URL is verified, subscribe to the desired events (e.g., `message.channels`).
 
-## Step 5: Test Integration
+## Step 4: Test Integration
 
 1. Send a message to your Slack channel (e.g., `#dev-channel`) with text containing `fail`, `in progress`, or `success`.
 2. Observe the behavior of your smart bulb based on the message content:
@@ -105,15 +103,12 @@ ngrok http 5000
    - `in progress`: Bulb blinks yellow slowly until the next event.
    - `success`: Bulb turns solid #52466F for 25 seconds.
 
-
 ## Production Steps
 SSH into the PI and run TMUX sessions:
 
 ### Start App and NGROK
 
-Using tmux to run app in background:
-
-Start App
+Start App using tmux to run app in background
 
 `tmux new-session -d -s sglightsession "source <path_to_project>/venv/bin/activate && cd <path_to_project> && python app.py"`
 
