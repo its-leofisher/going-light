@@ -17,18 +17,11 @@ indicate progress of deployments to servers.  Facilitating communication through
 - Slack workspace and app
 - Ngrok for local public availability using WAF for whitelisting
 
-## Quickstart to get started:
-- git clone going-light repo
-- `cd going-light`
-- `touch device_cache.json` - file used to store information about the bulb minimizing health checks
-- `python3 -m venv venv`
-- `source venv/bin/activate`
-- `pip install -r requirements.txt`
 
-# Detailed Steps
+# Setup Project Steps
 ## Step 1: Environment Setup
 
-### 1.1 Update and Upgrade Raspberry Pi
+### 1.1 Update and Upgrade Raspberry Pi packages
 
 ```sh
 sudo apt update
@@ -54,6 +47,13 @@ python3 -m venv venv
 source venv/bin/activate
 ```
 
+### 1.3 Clone, Setup and Install Dependencies
+
+- git clone going-light repo: `git clone git@github.com:its-leofisher/going-light.git`
+- `cd going-light`
+- `touch device_cache.json` - file used to store information about the bulb minimizing health checks
+- `pip install -r requirements.txt`
+
 ## Step 2: Discover Smart Bulb
 
 ### 2.2 Run Discovery Script
@@ -64,7 +64,7 @@ python discover_devices.py
 
 Note down the alias of the smart bulb you want to control.
 
-Update alias of light bulb in app.py
+Update alias of light bulb in [app.py](https://github.com/its-leofisher/going-light/blob/bb6e9ff1efbce4e440b003eac80504671b295a8c/app.py#L12)
 
 ## Step 3: Run Flask Application
 
