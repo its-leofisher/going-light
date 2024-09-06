@@ -7,16 +7,17 @@ indicate progress of deployments to servers.  Facilitating communication through
 
 ## Prerequisites
 
-- Raspberry Pi with Raspbian OS
+- [Raspberry Pi with Raspbian OS](https://www.raspberrypi.com/products/)
 - Python 3 and pip installed
 - Python Virtual Env
     ```sh
     pip3 install virtualenv
     ```
-- TP-Link Kasa smart bulb
+- [TP-Link Kasa smart bulb](https://a.co/d/72jUNL2)
 - Slack workspace and app
 - Ngrok for local public availability using WAF for whitelisting
-
+  - [Sign up, install](https://ngrok.com/download) and set up a static domain to make it easier
+  - Its important to secure your endpoint
 
 # Setup Project Steps
 ## Step 1: Environment Setup
