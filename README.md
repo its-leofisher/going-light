@@ -1,6 +1,6 @@
-# The Light
+# Overview
 
-Initial purpose is to indicate progress of deployments to servers but can be used to portray differnt indicators.  Essentially facilitating communication through light.  
+The projects initial purpose is to indicate progress of code deployments to servers via incoming API requests, but can be changed to represent different meanings.  Essentially facilitating communication through light.  
 
 Created with Flask on a Raspberry Pi 2W (Or any SBC with WiFi/Bluetooh Modules) to control a TP-Link smart bulb via [Python Kasa](https://github.com/python-kasa/python-kasa) library based on incoming Slack event payloads.  Ngrok is used to make the pi receive incoming API requests.  The application is meant to be on 24/7 so the Pi 2 W was my choice due to the low power consumption when idle and under load.
 
