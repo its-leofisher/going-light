@@ -11,7 +11,8 @@
 1. Send a message to your Slack channel (e.g., `#your-channel`) with text containing `fail`, `in progress`, or `success`.
 
 2. Or Alternatively use this curl command:
-  `curl -X POST http://localhost:5000/slack/events \
+  ```bash
+  curl -X POST http://localhost:5000/slack/events \
   -H "Content-Type: application/json" \
   -d '{
     "event": {
@@ -21,8 +22,8 @@
     },
     "type": "event_callback"
   }'
-`
-3. Observe the behavior of your smart bulb based on the message content:
+```
+4. Observe the behavior of your smart bulb based on the message content:
    - `fail`: Bulb blinks red for 10 seconds.
    - `in progress`: Bulb blinks yellow slowly until the next event.
    - `success`: Bulb turns solid #52466F for 25 seconds.
