@@ -1,8 +1,13 @@
 # Overview
 
-The projects initial purpose is to indicate progress of code deployments to servers via incoming API requests, but can be changed to represent different meanings.  Essentially facilitating communication through light.  
+The projects initial purpose is to indicate statuses of code deployments:
+   - In Progress = Yellow Light
+   - Fail = Red Light
+   - Success = Your Favorite Light.
 
-Created with Flask on a Raspberry Pi 2W (Or any SBC with WiFi/Bluetooh Modules) to control a TP-Link smart bulb via [Python Kasa](https://github.com/python-kasa/python-kasa) library based on incoming Slack event payloads.  Ngrok is used to make the pi receive incoming API requests.  The application is meant to be on 24/7 so the Pi 2 W was my choice due to the low power consumption when idle and under load.
+Incoming statuses are received by the application and performs a call to the smart bulb.  The meanings of the lights can be changed to represent different events.  Essentially, its used for  facilitating communication through light.  
+
+Created with Flask on a [Raspberry Pi 2W](https://www.canakit.com/raspberry-pi-zero-2-w.html) (Or any SBC with WiFi/Bluetooh Modules) to control a TP-Link smart bulb via [Python Kasa](https://github.com/python-kasa/python-kasa) library based on incoming Slack event payloads.  Ngrok is used to make the pi available publically to receive incoming API requests.  The application is meant to be on 24/7 so the Pi 2 W was my choice due to the low power consumption when idle and under load.
 
 ## Setting Up Project
 
