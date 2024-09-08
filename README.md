@@ -1,7 +1,8 @@
 # The Light
 
-This project is created with a Flask application on a Raspberry Pi to control a TP-Link smart bulb based on Slack events.  Initial purpose is to
-indicate progress of deployments to servers.  Facilitating communication through light.
+Initial purpose is to indicate progress of deployments to servers but can be used to portray differnt indicators.  Essentially facilitating communication through light.  
+
+Created with Flask on a Raspberry Pi 2W (Or any SBC with WiFi/Bluetooh Modules) to control a TP-Link smart bulb via [Python Kasa](https://github.com/python-kasa/python-kasa) library based on incoming Slack event payloads.  Ngrok is used to make the pi receive incoming API requests.  The application is meant to be on 24/7 so the Pi 2 W was my choice due to the low power consumption when idle and under load.
 
 ## Setting Up Project
 
@@ -14,8 +15,9 @@ indicate progress of deployments to servers.  Facilitating communication through
     pip3 install virtualenv
     ```
 - [TP-Link Kasa smart bulb](https://a.co/d/72jUNL2)
-- Slack workspace and app
-- Ngrok for local public availability using WAF for whitelisting
+- A Slack workspace and app
+    * Phase 2: abstract class for other Communication Apps
+- Ngrok
   - [Sign up, install](https://ngrok.com/download) and set up a static domain to make it easier
   - Its important to secure your endpoint
 
