@@ -42,24 +42,21 @@ sudo apt upgrade
 sudo apt install python3 python3-pip
 ```
 
-### 1.3 Install Virtualenv
-
-```sh
-pip3 install virtualenv
-```
-
-### 1.4 Create and Activate Virtual Environment
-
-```sh
-python3 -m venv venv
-source venv/bin/activate
-```
-
-### 1.3 Clone, Setup and Install Dependencies
+### 1.3 Clone
 
 - git clone going-light repo: `git clone git@github.com:its-leofisher/going-light.git`
 - `cd going-light`
+
+### 1.4 Create Virtual Env and activate
+  ```sh
+  pip3 install virtualenv
+  source venv/bin/activate
+  ```
+
+### 1.5 Setup
 - `touch device_cache.json` - file used to store information about the bulb minimizing health checks
+
+### 1.6  Install Project Dependencies
 - `pip install -r requirements.txt`
 
 ## Step 2: Discover Smart Bulb
