@@ -41,81 +41,91 @@ def rgb_to_hsv(r, g, b):
 async def discover_and_cache_devices(target_alias='',is_setup=False):
     """Attempt to discover devices on network and store target device
     alias to Cache and Storage for future retrieval"""
-    task = asyncio.create_task(loading_dots('Searching for devices'))
+    while True:
+        task = asyncio.create_task(loading_dots('Searching for devices'))
 
-    try:
-        devices = await Discover.discover()
+        try:
+            devices = await Discover.discover()
 
-        if not devices:
-            print('\n\nCould not find any devices on your network. Make sure to setup your device and connect it to your network, and retry.')
-            await cancel_task(task)
+            if not devices:
+                print('\n\nCould not find any devices on your network. Make sure to setup your device and connect it to your network, and retry.')
+                await cancel_task(task)
+                return False
+
+        except Exception as e:
+            print(f'\nCritical error occurred: {e}')
+
+        # ensure async task for dot loading is cancelled properly
+        await cancel_task(task)
+
+        devices_list = []
+        compatible_device_count = 0
+        incompatible_device_count = 0
+
+        for ip_addr, dev in devices.items():
+
+            await dev.update()
+
+            if isinstance(dev, SmartBulb) and dev.alias:
+
+               # If target alias passed in then select it automatically otherwise perform prompt
+               if dev.alias == target_alias and is_setup == False:
+                    print(f"Previous device found with alias {dev.alias}")
+                    continue_w_prev_device = input("Will you like to use this device? Enter 'yes' or 'no': ")
+
+                    if continue_w_prev_device.lower() == 'y' or continue_w_prev_device.lower() == 'yes':
+                        set_primary_device_data(dev.alias, ip_addr)
+                        set_cached_device(ip_addr)
+                        return ip_addr
+                    else:
+                        print("Continuing discovery, when completed you will be able to select a new primary device.")
+                        is_setup = True
+                        target_alias = ''
+               else:
+                    print(f"\nCompatible device found: {dev.alias} @ {ip_addr}")
+                    compatible_device_count += 1
+                    devices_list.append([dev.alias, ip_addr])
+            else:
+               print('\nDevice is not compatible.')
+               print(f"{dev}")
+               incompatible_device_count += 1
+
+        print(f"\nTotal compatible devices: {compatible_device_count}")
+        print(f"\nTotal incompatible devices: {incompatible_device_count}")
+        print(f"\nTotal devices found on network: {compatible_device_count + incompatible_device_count}")
+
+        if compatible_device_count == 0:
+            print(f"\nNo compatible devices found. Please connect your device to your network and your hardware to the same network, try again.")
             return False
 
-    except Exception as e:
-        print(f'\nCritical error occurred: {e}')
+        if not target_alias:
 
-    # ensure async task for dot loading is cancelled properly
-    await cancel_task(task)
+            print("\nList of Compatible Devices")
+            print("=========================")
+            for index, (dev_alias, ip_addr) in enumerate(devices_list):
+                print(f"{index}: {dev_alias} @ {ip_addr}")
 
-    devices_list = []
-    compatible_device_count = 0
-    incompatible_device_count = 0
+            device_pick_result = pick_device(devices_list)
 
-    for ip_addr, dev in devices.items():
+            if device_pick_result == 'retry':
+                continue
 
-        await dev.update()
-
-        if isinstance(dev, SmartBulb) and dev.alias:
-
-           # If target alias passed in then select it automatically otherwise perform prompt
-           if dev.alias == target_alias and is_setup == False:
-                print(f"Previous device found with alias {dev.alias}")
-                continue_w_prev_device = input("Will you like to use this device? Enter 'yes' or 'no': ")
-
-                if continue_w_prev_device.lower() == 'y' or continue_w_prev_device.lower() == 'yes':
-                    set_primary_device_data(dev.alias, ip_addr)
-                    set_cached_device(ip_addr)
-                    return ip_addr
-                else:
-                    print("Continuing discovery, when completed you will be able to select a new primary device.")
-                    is_setup = True
-                    target_alias = ''
-           else:
-                print(f"\nCompatible device found: {dev.alias} @ {ip_addr}")
-                compatible_device_count += 1
-                devices_list.append([dev.alias, ip_addr])
-        else:
-           print('\nDevice is not compatible.')
-           print(f"{dev}")
-           incompatible_device_count += 1
-
-    print(f"\nTotal compatible devices: {compatible_device_count}")
-    print(f"\nTotal incompatible devices: {incompatible_device_count}")
-    print(f"\nTotal devices found on network: {compatible_device_count + incompatible_device_count}")
-
-    if compatible_device_count == 0:
-        print(f"\nNo compatible devices found. Please connect your device to your network and your hardware to the same network, try again.")
-        return False
-
-    if not target_alias:
-
-        print("\nList of Compatible Devices")
-        print("=========================")
-        for index, (dev_alias, ip_addr) in enumerate(devices_list):
-            print(f"{index}: {dev_alias} @ {ip_addr}")
-
-        if is_setup and pick_device(devices_list):
-            return True
+            if is_setup and device_pick_result == 'success':
+                return True
 
 def pick_device(devices_list):
     """Prompt the user to pick a device."""
 
     while True:
-        print('\nProvide the number of the device you want to respond to events...')
-        device_picked = input("> Enter number: ")
+        print('\nSelect the number of the device you want to respond to events.')
+        device_picked = input("Enter number (or type retry): ")
 
         try:
+            if device_picked == 'retry':
+                return device_picked
+
             device_picked = int(device_picked)
+
             if not devices_list[device_picked]:
                 raise IndexError()
             break
@@ -143,7 +153,7 @@ def pick_device(devices_list):
 
     print("Note: If you want to change the device number in the future re-run setup.")
 
-    return True
+    return 'success'
 
 def set_primary_device_data(device_alias, ip_addr):
     """Set primary device, used in app.py to know which device to communicate with"""
