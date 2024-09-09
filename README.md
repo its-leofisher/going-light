@@ -18,7 +18,7 @@ The meanings of the lights can be changed to represent different events in the c
 
 ## Prerequisites
 
-- [Raspberry Pi with Raspbian OS](https://www.raspberrypi.com/products/) with SSH enabled
+- [Raspberry Pi Zero 2 W with Raspbian OS](https://www.raspberrypi.com/products/) with SSH enabled and connected to local network. Other SBCs or Laptop will do.
 - Python 3 and pip installed
 - Python VirtualEnv
 - **tmux** to run app and ngrok in background
