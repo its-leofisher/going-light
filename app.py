@@ -45,7 +45,7 @@ async def handle_message_event(event):
     if channel_id in SLACK_ALLOWED_CHANNELS:
         ip_address = load_cached_device()
         if not ip_address:
-            ip_address = await discover_and_cache_device(TARGET_BULB_ALIAS)
+            ip_address = await discover_and_cache_devices(TARGET_BULB_ALIAS)
 
         if ip_address:
             bulb = SmartBulb(ip_address)
