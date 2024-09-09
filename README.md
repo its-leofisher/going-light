@@ -1,16 +1,17 @@
 # Overview
 
-The projects initial purpose is to indicate statuses of code deployments through light with a Kasa TP-Link smart bulb.
+The projects initial purpose is to indicate statuses of code deployments by triggering different light bulb colors with a Kasa TP-Link smart bulb.  The deployment system sent status updates to a Slack Channel and custom slack app sends a request to a always on Raspberry PI running a copy of this Repo in turn sending a request to the smart bulb.  
+
+Created with Flask on a [Raspberry Pi 2 W](https://www.canakit.com/raspberry-pi-zero-2-w.html) (Or any SBC with Wifi connectivity) to control a TP-Link smart bulb via [Python Kasa](https://github.com/python-kasa/python-kasa) library in response to incoming Slack event payloads.  
+
+Ngrok is used to make the pi available publicly to receive incoming API requests.  The application is meant to be running 24/7 so the Pi 2 W was my choice due to the low power consumption when idle and under load.
 
 Default status and light mapping:
    - In Progress = Yellow Light
    - Fail = Red Light
    - Success = Your Favorite Light color
 
-Incoming statuses are received by the application and performs a call to the device API.  The meanings of the lights can be changed to represent different events.  Essentially, the project is used to facilitate communication through light.  
-
-Created with Flask on a [Raspberry Pi 2 W](https://www.canakit.com/raspberry-pi-zero-2-w.html) (Or any SBC with Wifi connectivity) to control a TP-Link smart bulb via [Python Kasa](https://github.com/python-kasa/python-kasa) library in response to incoming Slack event payloads.  
-Ngrok is used to make the pi available publicly to receive incoming API requests.  The application is meant to be running 24/7 so the Pi 2 W was my choice due to the low power consumption when idle and under load.
+The meanings of the lights can be changed to represent different events in the code.  Essentially, the project is used to facilitate communication through light.  
 
 ## Prerequisites
 
@@ -83,15 +84,29 @@ ngrok http 5000
 ### 3.3 Test your integration [optional]
 
 #### Slack
-Follow steps in `project-setup-docs.md`
+ - Follow steps in [here](https://github.com/its-leofisher/going-light/blob/main/project-setup-docs.md#testing-slack-integration)
+
+#### Example Curl Command
+```bash
+curl -X POST https://your_ngrok_url_here.app/v1/events \
+-H "Content-Type: application/json" \
+-d '{
+  "event": {
+    "type": "message",
+    "text": "success",
+    "channel": "CHANNEL_IDS"
+  },
+  "type": "event_callback"
+}'
+```
 
 #### More Integrations
-More integrations coming soon.
+ - More integrations coming soon.
 
 ## Production Steps
-When you're ready to leave the application running in the background we will use GUNICORN to serve the app. SSH into the Pi and run these TMUX commands:
+When you're ready to leave the application running in the background permanently we will use GUNICORN to serve the app. SSH into the Pi and run these TMUX commands:
 
-### Start App and NGROK
+### TMUX: Start App and NGROK
 
 SSH into the raspberry pi. Start App using tmux to run app in background
 
@@ -103,6 +118,10 @@ Running Ngrok and Detach Automatically
 
 `tmux new-session -d -s ngroksession 'gunicorn -w 2 -k uvicorn.workers.UvicornWorker app:app -b 127.0.0.1:8000
 '`
+
+### It's Ready!
+
+Any events going into `v1/events` endpoint will be verified and processed!
 
 ### Color Map Reference
 Message in payload: Color Mapping
