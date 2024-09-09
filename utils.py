@@ -47,7 +47,7 @@ async def discover_and_cache_devices(target_alias='',is_setup=False):
         devices = await Discover.discover()
 
         if not devices:
-            print('\n\nDevice not found❗ Make sure to setup your device and connect it to your network, then try again.')
+            print('\n\nCould not find any devices on your network. Make sure to setup your device and connect it to your network, and retry.')
             await cancel_task(task)
             return False
 

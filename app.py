@@ -45,7 +45,7 @@ async def handle_message_event(event):
     if channel_id in SLACK_ALLOWED_CHANNELS:
         ip_address = load_cached_device()
         if not ip_address:
-            ip_address = await discover_and_cache_device(TARGET_BULB_ALIAS)
+            ip_address = await discover_and_cache_devices(TARGET_BULB_ALIAS)
 
         if ip_address:
             bulb = SmartBulb(ip_address)
@@ -105,10 +105,9 @@ async def handle_message_event(event):
             if status_success:
                 await set_bulb_color(bulb, '#52466F', 15, blink=False)
         else:
-            logger.warning("No smart bulb found with the alias: " + TARGET_BULB_ALIAS)
+            logger.warning("Unable to find a device with alias: " + TARGET_BULB_ALIAS + ". Make sure it's connected to your network.")
     else:
         logger.warning("Event channel not in allowed channels: " + channel_id)
-
 
 @app.route('/v1/events', methods=['POST'])
 def events_endpoint():
@@ -128,4 +127,3 @@ def events_endpoint():
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
-
