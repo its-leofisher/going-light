@@ -12,7 +12,7 @@
 
 2. Or Alternatively use this curl command:
   ```bash
-  curl -X POST http://localhost:5000/slack/events \
+  curl -X POST http://localhost:5000/v1/events \
   -H "Content-Type: application/json" \
   -d '{
     "event": {

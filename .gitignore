@@ -161,5 +161,7 @@ cython_debug/
 
 # Project
 venv/
+.env
 device_cache.json
+primary_device.json
 .DS_Store
