@@ -39,7 +39,7 @@ def rgb_to_hsv(r, g, b):
     return int(h), int(s * 100), int(v * 100)
 
 async def discover_and_cache_devices(target_alias='',is_setup=False):
-    """Attempt to discover devices on network and store target device alias
+    """Attempt to discover devices on network and store target device
     alias to Cache and Storage for future retrieval"""
     task = asyncio.create_task(loading_dots('Searching for devices'))
 
@@ -58,8 +58,8 @@ async def discover_and_cache_devices(target_alias='',is_setup=False):
     await cancel_task(task)
 
     devices_list = []
-
-    item_number = 0
+    compatible_device_count = 0
+    incompatible_device_count = 0
 
     for ip_addr, dev in devices.items():
 
@@ -68,24 +68,43 @@ async def discover_and_cache_devices(target_alias='',is_setup=False):
         if isinstance(dev, SmartBulb) and dev.alias:
 
            # If target alias passed in then select it automatically otherwise perform prompt
-           if dev.alias == target_alias:
-                set_primary_device_data(dev.alias, ip_addr)
-                set_cached_device(ip_addr)
-                return ip_addr
+           if dev.alias == target_alias and is_setup == False:
+                print(f"Previous device found with alias {dev.alias}")
+                continue_w_prev_device = input("Will you like to use this device? Enter 'yes' or 'no': ")
+
+                if continue_w_prev_device.lower() == 'y' or continue_w_prev_device.lower() == 'yes':
+                    set_primary_device_data(dev.alias, ip_addr)
+                    set_cached_device(ip_addr)
+                    return ip_addr
+                else:
+                    print("Continuing discovery, when completed you will be able to select a new primary device.")
+                    is_setup = True
+                    target_alias = ''
            else:
-                if not is_setup:
-                    print("\nLooks like setup.py was not run, triggering setup process.")
-                print("\nList of Devices")
-                print("=====================")
-                print(f"{item_number}: {dev.alias} @ {ip_addr}")
+                print(f"\nCompatible device found: {dev.alias} @ {ip_addr}")
+                compatible_device_count += 1
                 devices_list.append([dev.alias, ip_addr])
         else:
            print('\nDevice is not compatible.')
+           print(f"{dev}")
+           incompatible_device_count += 1
 
-        ++item_number
+    print(f"\nTotal compatible devices: {compatible_device_count}")
+    print(f"\nTotal incompatible devices: {incompatible_device_count}")
+    print(f"\nTotal devices found on network: {compatible_device_count + incompatible_device_count}")
 
-    if not target_alias and is_setup:
-        if pick_device(devices_list):
+    if compatible_device_count == 0:
+        print(f"\nNo compatible devices found. Please connect your device to your network and your hardware to the same network, try again.")
+        return False
+
+    if not target_alias:
+
+        print("\nList of Compatible Devices")
+        print("=========================")
+        for index, (dev_alias, ip_addr) in enumerate(devices_list):
+            print(f"{index}: {dev_alias} @ {ip_addr}")
+
+        if is_setup and pick_device(devices_list):
             return True
 
 def pick_device(devices_list):
