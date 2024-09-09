@@ -1,48 +1,48 @@
 # Overview
 
-The projects initial purpose is to indicate statuses of code deployments:
+The projects initial purpose is to indicate statuses of code deployments through light with a Kasa TP-Link smart bulb.
+
+Default status and light mapping:
    - In Progress = Yellow Light
    - Fail = Red Light
-   - Success = Your Favorite Light.
+   - Success = Your Favorite Light color
 
-Incoming statuses are received by the application and performs a call to the smart bulb.  The meanings of the lights can be changed to represent different events.  Essentially, its used for  facilitating communication through light.  
+Incoming statuses are received by the application and performs a call to the device API.  The meanings of the lights can be changed to represent different events.  Essentially, the project is used to facilitate communication through light.  
 
-Created with Flask on a [Raspberry Pi 2W](https://www.canakit.com/raspberry-pi-zero-2-w.html) (Or any SBC with WiFi/Bluetooh Modules) to control a TP-Link smart bulb via [Python Kasa](https://github.com/python-kasa/python-kasa) library based on incoming Slack event payloads.  Ngrok is used to make the pi available publically to receive incoming API requests.  The application is meant to be on 24/7 so the Pi 2 W was my choice due to the low power consumption when idle and under load.
-
-## Setting Up Project
+Created with Flask on a [Raspberry Pi 2 W](https://www.canakit.com/raspberry-pi-zero-2-w.html) (Or any SBC with Wifi connectivity) to control a TP-Link smart bulb via [Python Kasa](https://github.com/python-kasa/python-kasa) library in response to incoming Slack event payloads.  Ngrok is used to make the pi available publicly to receive incoming API requests.  The application is meant to be running 24/7 so the Pi 2 W was my choice due to the low power consumption when idle and under load.
 
 ## Prerequisites
 
-- [Raspberry Pi with Raspbian OS](https://www.raspberrypi.com/products/)
+- [Raspberry Pi with Raspbian OS](https://www.raspberrypi.com/products/) with SSH enabled
 - Python 3 and pip installed
-- Python Virtual Env
-    ```sh
-    pip3 install virtualenv
-    ```
-- [TP-Link Kasa smart bulb](https://a.co/d/72jUNL2)
+- Python VirtualEnv
+- **tmux** to run app and ngrok in background
+- Already configured [TP-Link Kasa smart bulb](https://a.co/d/72jUNL2)
 - A Slack workspace and app
     * Phase 2: abstract class for other Communication Apps
 - Ngrok
   - [Sign up, install](https://ngrok.com/download) and set up a static domain to make it easier
-  - Its important to secure your endpoint
+  - It's important to secure your endpoint
 
-# Setup Project Steps
+# Setup Steps
 ## Step 1: Environment Setup
 
 ### 1.1 Update and Upgrade Raspberry Pi packages
+Install latest raspbian on SD card using [Raspberry Imager](https://www.raspberrypi.com/software/).
 
 ```sh
 sudo apt update
 sudo apt upgrade
 ```
 
-### 1.2 Install Python and Pip
+### 1.2 Install Tmux, Python and Pip on PI
 
 ```sh
 sudo apt install python3 python3-pip
+sudo apt-get install tmux
 ```
 
-### 1.3 Clone
+### 1.3 Clone Going Light Repo
 
 - git clone going-light repo: `git clone git@github.com:its-leofisher/going-light.git`
 - `cd going-light`
@@ -53,39 +53,25 @@ sudo apt install python3 python3-pip
   source venv/bin/activate
   ```
 
-### 1.5 Setup
-- `touch device_cache.json` - file used to store information about the bulb minimizing health checks
-
-### 1.6  Install Project Dependencies
+### 1.5  Install Project Dependencies
 - `pip install -r requirements.txt`
 
-## Step 2: Discover Smart Bulb
-
-### 2.2 Run Discovery Script
+## Step 2: Run setup script
+This script will create necessary files and perform device discovery.  Ensure your device is set up and connected to your network prior to running.
 
 ```sh
-python discover_devices.py
+python3 setup.py
 ```
-
-Note down the alias of the smart bulb you want to control.
-
-Update alias of light bulb in [app.py](https://github.com/its-leofisher/going-light/blob/bb6e9ff1efbce4e440b003eac80504671b295a8c/app.py#L12)
 
 ## Step 3: Run Flask Application
 
-### 3.1 Activate Virtual Environment
-
-```sh
-source venv/bin/activate
-```
-
-### 3.2 Run Flask Application
+### 3.1 Run Flask Application in Dev Mode
 
 ```sh
 python app.py
 ```
 
-### 3.3 Start Ngrok
+### 3.2 Start Ngrok
 
 Open a new terminal and start Ngrok to expose your Flask application:
 
@@ -93,55 +79,55 @@ Open a new terminal and start Ngrok to expose your Flask application:
 ngrok http 5000
 ```
 
-### 3.4 Update Slack Event Subscription
+### 3.3 Test your integration [optional]
 
-1. Go to your Slack app settings.
-2. In the "Event Subscriptions" section, set the "Request URL" to the Ngrok URL, for example, `https://abcd1234.ngrok.io/slack/events`.
-3. Save the changes. Slack will send a verification request to your endpoint.
-4. Once the URL is verified, subscribe to the desired events (e.g., `message.channels`).
+#### Slack
+Follow steps in `project-setup-docs.md`
 
-## Step 4: Test Integration
-
-1. Send a message to your Slack channel (e.g., `#dev-channel`) with text containing `fail`, `in progress`, or `success`.
-2. Observe the behavior of your smart bulb based on the message content:
-   - `fail`: Bulb blinks red for 10 seconds.
-   - `in progress`: Bulb blinks yellow slowly until the next event.
-   - `success`: Bulb turns solid #52466F for 25 seconds.
+#### More Integrations
+More integrations coming soon.
 
 ## Production Steps
-SSH into the PI and run TMUX sessions:
+When you're ready to leave the application running in the background we will use GUNICORN to serve the app. SSH into the Pi and run these TMUX commands:
 
 ### Start App and NGROK
 
-Start App using tmux to run app in background
+SSH into the raspberry pi. Start App using tmux to run app in background
 
-`tmux new-session -d -s sglightsession "source <path_to_project>/venv/bin/activate && cd <path_to_project> && python app.py"`
+`tmux new-session -d -s appsession "source <path_to_project>/venv/bin/activate && cd <path_to_project> && gunicorn -w 2 -b 127.0.0.1:8000 app:app"`
 
 ### Start NGROK
 
-Running Ngrok and Detatch Automatically
+Running Ngrok and Detach Automatically
 
-`tmux new-session -d -s ngroksession 'ngrok http 5000 --domain informed-absolute-malamute.ngrok-free.app'`
+`tmux new-session -d -s ngroksession 'gunicorn -w 2 -k uvicorn.workers.UvicornWorker app:app -b 127.0.0.1:8000
+'`
 
-### Reference
-Message and Color Mapping
+### Color Map Reference
+Message in payload: Color Mapping
 ```
 {
-    'fail': '#FF0000',
-    'in progress': '#FFFF00',
-    'success': '#52466F',
-    'orange': '#FFA500',
-    'blue': '#0000FF',
-    'green': '#008000',
-    'yellow': '#FFFF00',
-    'red': '#FF0000',
-    'purple': '#800080',
-    'black': '#000000',
-    'dark green': '#006400',
-    'dark blue': '#00008B',
-    'happy': '#FFFF00',
-    'sad': '#0000FF',
-    'laughing': '#FFD700',
-    'fun': '#FF69B4'
+    'fail': ('#FF0000', True, 30),
+    'in progress': ('#FFFF00', True, 25),
+    'in process': ('#FFFF00', True, 25),
+    'processing': ('#FFFF00', True, 25),
+    'success': ('#5C214A', False, 35),
+    'off': ('', None, None),  # Special case to handle power off
+    'on': ('', None, None),  # Special case to handle power on
+    'orange': ('#FFA500', False, None),
+    'royal purple': ('#5C214A', False, None),
+    'matcha green': ('#94A796', False, None),
+    'blue': ('#0000FF', False, None),
+    'green': ('#008000', False, None),
+    'yellow': ('#FFFF00', False, None),
+    'red': ('#FF0000', False, None),
+    'purple': ('#800080', False, None),
+    'black': ('#000000', False, None),
+    'dark green': ('#006400', False, None),
+    'dark blue': ('#00008B', False, None),
+    'happy': ('#FFFF00', False, None),
+    'sad': ('#0000FF', False, None),
+    'laughing': ('#FFD700', False, None),
+    'fun': ('#FF69B4', False, None)
 }
 ```
