@@ -2,14 +2,20 @@ from flask import Flask, request, jsonify
 import asyncio
 import logging
 from kasa import SmartBulb
-from utils import rgb_to_hsv, discover_and_cache_device, load_cached_device
+from utils import rgb_to_hsv, discover_and_cache_devices, load_cached_device, retrieve_primary_device
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 
-logging.basicConfig(level=logging.DEBUG)
+if (int(os.getenv('ENABLE_APP_DEBUG'))):
+    logging.basicConfig(level=logging.DEBUG)
+
 logger = logging.getLogger(__name__)
 
-TARGET_BULB_ALIAS = 'Light Bulb Name'
+TARGET_BULB_ALIAS = retrieve_primary_device()
 SLACK_ALLOWED_CHANNELS = {'CHANNEL_IDS'}
 
 async def set_bulb_color(bulb, hex_color, duration=None, blink=False):
@@ -49,6 +55,8 @@ async def handle_message_event(event):
             color_map = {
                 'fail': ('#FF0000', True, 30),
                 'in progress': ('#FFFF00', True, 25),
+                'in process': ('#FFFF00', True, 25),
+                'processing': ('#FFFF00', True, 25),
                 'success': ('#5C214A', False, 35),
                 'off': ('', None, None),  # Special case to handle power off
                 'on': ('', None, None),  # Special case to handle power on
