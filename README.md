@@ -11,7 +11,10 @@ Default status and light mapping:
    - Fail = Red Light
    - Success = Your Favorite Light color
 
-The meanings of the lights can be changed to represent different events in the code.  Essentially, the project is used to facilitate communication through light.  
+The meanings of the lights can be changed to represent different events in the code.  Essentially, the project is used to facilitate communication through light. 
+
+## Diagram
+<img width="1265" alt="image" src="https://github.com/user-attachments/assets/81124ca5-7352-48df-83ba-7680e6f4a079">
 
 ## Prerequisites
 
