@@ -9,7 +9,8 @@ Default status and light mapping:
 
 Incoming statuses are received by the application and performs a call to the device API.  The meanings of the lights can be changed to represent different events.  Essentially, the project is used to facilitate communication through light.  
 
-Created with Flask on a [Raspberry Pi 2 W](https://www.canakit.com/raspberry-pi-zero-2-w.html) (Or any SBC with Wifi connectivity) to control a TP-Link smart bulb via [Python Kasa](https://github.com/python-kasa/python-kasa) library in response to incoming Slack event payloads.  Ngrok is used to make the pi available publicly to receive incoming API requests.  The application is meant to be running 24/7 so the Pi 2 W was my choice due to the low power consumption when idle and under load.
+Created with Flask on a [Raspberry Pi 2 W](https://www.canakit.com/raspberry-pi-zero-2-w.html) (Or any SBC with Wifi connectivity) to control a TP-Link smart bulb via [Python Kasa](https://github.com/python-kasa/python-kasa) library in response to incoming Slack event payloads.  
+Ngrok is used to make the pi available publicly to receive incoming API requests.  The application is meant to be running 24/7 so the Pi 2 W was my choice due to the low power consumption when idle and under load.
 
 ## Prerequisites
 
