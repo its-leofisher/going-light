@@ -20,9 +20,13 @@ SLACK_ALLOWED_CHANNELS = {'CHANNEL_IDS'}
 
 async def set_bulb_color(bulb, hex_color, duration=None, blink=False):
     red, green, blue = int(hex_color[1:3], 16), int(hex_color[3:5], 16), int(hex_color[5:7], 16)
+
     hue, saturation, value = rgb_to_hsv(red, green, blue)
+
     await bulb.turn_on()
+
     await asyncio.sleep(1)
+
     await bulb.set_hsv(hue, saturation, value)
     
     if blink:
@@ -42,8 +46,10 @@ async def set_bulb_color(bulb, hex_color, duration=None, blink=False):
 async def handle_message_event(event):
     logger.debug(f"Handling event: {event}")
     channel_id = event.get('channel')
+
     if channel_id in SLACK_ALLOWED_CHANNELS:
         ip_address = load_cached_device()
+
         if not ip_address:
             ip_address = await discover_and_cache_devices(TARGET_BULB_ALIAS)
 
@@ -52,6 +58,7 @@ async def handle_message_event(event):
             await bulb.update()
 
             # Colors and blink status for different message types
+            # @todo change to lightbulb_behavior_mapping
             color_map = {
                 'fail': ('#FF0000', True, 30),
                 'in progress': ('#FFFF00', True, 25),
@@ -78,6 +85,7 @@ async def handle_message_event(event):
             }
 
             message_text = event.get('text', '').lower().strip()
+
             status_success = False  # Flag to track success status
 
             for keyword, (color, blink, duration) in color_map.items():
