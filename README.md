@@ -2,6 +2,8 @@
 
 Welcome! Going Light is meant to be used as a status indicator through light, receiving a message with a keyword from a service and triggering a Smart Bulb to notify you...one less message to read and dashboard to aggregate.  Future plans include making more services and devices compatible.
 
+The meanings of the lights can be changed to represent different events and statuses.  Essentially, the project is used to facilitate communication through light.
+
 ## Brief History
 This projects initial purpose was to indicate stages of code deployments by triggering different light bulb colors through a Kasa TP-Link SmartBulb.  The deployment system sent status updates to a Slack channel and a custom slack app was set up to relay the request to an always on Raspberry Pi 2 W running a copy of "Going Light".  The Application then maps the message/status to a pre-defined color and performs an API call to the registered lightbulb causing it to display the color for a certain duration.
 
@@ -16,9 +18,6 @@ Created with Flask on a [Raspberry Pi 2 W](https://www.canakit.com/raspberry-pi-
    - "laughing" triggers a solid gold "FFD700"
    - "on" and "off" will toggle the light
    - View more [here](https://github.com/its-leofisher/going-light/edit/main/README.md#default-statusemotions-and-light-color-mapping)
-
-## Mantra
-The meanings of the lights can be changed to represent different events in the code.  Essentially, the project is used to facilitate communication through light. 
 
 ## Diagram
 <img width="1265" alt="image" src="https://github.com/user-attachments/assets/81124ca5-7352-48df-83ba-7680e6f4a079">
