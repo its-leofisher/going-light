@@ -18,7 +18,7 @@ CACHE_EXPIRY = int(os.getenv('CACHE_EXPIRY_SECONDS'))
 PRIMARY_DEVICE_FILE = os.getenv('PRIMARY_DEVICE_FILENAME')
 
 def rgb_to_hsv(r, g, b):
-    """Convert RGB to HSV."""
+    """Convert RGB to Hue, Saturation, Value (brightness)."""
     r, g, b = r / 255.0, g / 255.0, b / 255.0
     mx = max(r, g, b)
     mn = min(r, g, b)
