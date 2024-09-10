@@ -1,8 +1,8 @@
 # Overview
 
-Welcome! Going Light is meant to be used as a status indicator through light, receiving a message with a keyword from a service and triggering a Smart Bulb to notify you...one less message to read and dashboard to aggregate.  Future plans include making more services and devices compatible.
+Welcome! Going Light is meant to be used as a status indicator through light, receiving a message with a keyword from a service and triggering a Smart Bulb to notify you...one less message to read and dashboard/screen to context switch to.
 
-The meanings of the lights can be changed to represent different events and statuses.  Essentially, the project is used to facilitate communication through light.
+The meanings of the lights can be changed to represent different events and statuses.  Essentially, the project is used to facilitate communication through light.  This means that the devices need to have the ability to change colors and be dimmable.
 
 ## Brief History
 This projects initial purpose was to indicate stages of code deployments by triggering different light bulb colors through a Kasa TP-Link SmartBulb.  The deployment system sent status updates to a Slack channel and a custom slack app was set up to relay the request to an always on Raspberry Pi 2 W running a copy of "Going Light".  The Application then maps the message/status to a pre-defined color and performs an API call to the registered lightbulb causing it to display the color for a certain duration.
@@ -29,6 +29,7 @@ Created with Flask on a [Raspberry Pi 2 W](https://www.canakit.com/raspberry-pi-
 - Python VirtualEnv
 - **tmux** to run app and ngrok in background
 - Already configured [TP-Link Kasa smart bulb](https://a.co/d/72jUNL2)
+  - Or a device that can change colors and is dimmable
 - A Slack workspace and app
     * Phase 2: abstract class for other Communication Apps
 - Ngrok
@@ -127,8 +128,7 @@ SSH into the raspberry pi. Start App using tmux to run app in background
 
 Running Ngrok and Detach Automatically
 
-`tmux new-session -d -s ngroksession 'gunicorn -w 2 -k uvicorn.workers.UvicornWorker app:app -b 127.0.0.1:8000
-'`
+`tmux new-session -d -s ngroksession 'gunicorn -w 2 -k uvicorn.workers.UvicornWorker app:app -b 127.0.0.1:8000'`
 
 ### It's Ready!
 
@@ -143,8 +143,8 @@ Message in payload: Color Mapping
     'in process': ('#FFFF00', True, 25),
     'processing': ('#FFFF00', True, 25),
     'success': ('#5C214A', False, 35),
-    'off': ('', None, None),  # Special case to handle power off
-    'on': ('', None, None),  # Special case to handle power on
+    'off': ('', None, None),
+    'on': ('', None, None),
     'orange': ('#FFA500', False, None),
     'royal purple': ('#5C214A', False, None),
     'matcha green': ('#94A796', False, None),
