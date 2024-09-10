@@ -1,17 +1,23 @@
 # Overview
 
-The projects initial purpose was to indicate stages of code deployments by triggering different light bulb colors through a Kasa TP-Link SmartBulb.  The deployment system sent status updates to a Slack Channel and a custom slack app was set up to relay the request to an always on Raspberry Pi 2 W running a copy of the Application.  The Application then maps the message/status to a pre-defined color and performs an API call to the registered lightbulb.
+Welcome! Going Light is meant to be used as a status indicator through light, receiving a message with a keyword from a service and triggering a Smart Bulb to notify you...one less message to read and dashboard to aggregate.  Future plans include making more services and devices compatible.
 
-Created with Flask on a [Raspberry Pi 2 W](https://www.canakit.com/raspberry-pi-zero-2-w.html) (Or any SBC with Wifi connectivity) to control a TP-Link smart bulb via [Python Kasa](https://github.com/python-kasa/python-kasa) library in response to incoming Slack event payloads.  
+## Brief History
+This projects initial purpose was to indicate stages of code deployments by triggering different light bulb colors through a Kasa TP-Link SmartBulb.  The deployment system sent status updates to a Slack channel and a custom slack app was set up to relay the request to an always on Raspberry Pi 2 W running a copy of "Going Light".  The Application then maps the message/status to a pre-defined color and performs an API call to the registered lightbulb causing it to display the color for a certain duration.
 
-Ngrok is used to make the pi available publicly to receive incoming API requests.  The application is meant to be running 24/7 so the Pi 2 W was my choice due to the low power consumption when idle and under load.
+## Tech Stack
+Created with Flask on a [Raspberry Pi 2 W](https://www.canakit.com/raspberry-pi-zero-2-w.html) (Or any SBC with Wifi connectivity) to control a TP-Link Smart Bulb via [Python Kasa](https://github.com/python-kasa/python-kasa) library.  Ngrok is used to make the pi available publicly to receive incoming API requests.  The application is meant to be running 24/7 so the Pi 2 W was my choice due to the low power consumption when idle and under load.
 
-Default status and light mapping:
-   - "In Progress" triggers a Blinking Yellow Light for 25 seconds
-   - "Fail" triggers a Red Light
-   - "success" triggers a Green Light for 30 seconds.
+## Default status/emotions and light color mapping:
+   - "In Progress" triggers a blinking Yellow Light for 25 seconds
+   - "Fail" triggers a Red Light for 30 seconds
+   - "success" triggers a Green Light for 35 seconds
+   - "green" triggers a solid green light
+   - "laughing" triggers a solid gold "FFD700"
    - "on" and "off" will toggle the light
+   - View more [here](https://github.com/its-leofisher/going-light/edit/main/README.md#default-statusemotions-and-light-color-mapping)
 
+## Mantra
 The meanings of the lights can be changed to represent different events in the code.  Essentially, the project is used to facilitate communication through light. 
 
 ## Diagram
