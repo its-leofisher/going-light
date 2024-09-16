@@ -162,3 +162,9 @@ Message in payload: Color Mapping
     'fun': ('#FF69B4', False, None)
 }
 ```
+
+### Support
+Open to code contributions, bug reports, new ideas or coffee|tea|books
+
+<a href="https://www.buymeacoffee.com/leoeff"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee||tea||books&emoji=🌞&slug=leoeff&button_colour=FFDD00&font_colour=000000&font_family=Bree&outline_colour=000000&coffee_colour=ffffff" /></a>
+
