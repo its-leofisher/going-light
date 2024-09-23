@@ -163,8 +163,26 @@ Message in payload: Color Mapping
 }
 ```
 
-### Support
-Open to code contributions, bug reports, new ideas or coffee|tea|books
+### Contribute
+Open to code contributions, bug reports, and new ideas
 
+**To report a bug:**
+- Make sure that it can be replicated at least 65% of the time
+- Open a new issue and add as much detail as possible
+
+**For New Ideas:**
+- Start a [discussion here](https://github.com/its-leofisher/going-light/discussions/categories/ideas)
+
+**To contribute code:**
+- First make a ticket with a description of contribution OR pick up a ticket already open
+- Make a [fork of `Main` branch](https://github.com/its-leofisher/going-light/fork)
+- Create a new branch and start committing
+  - Important to adhere to [Zen of Python "PEP20"](https://docs.python-guide.org/writing/style/#zen-of-python) and [PEP8](https://docs.python-guide.org/writing/style/#pep-8)
+- When you're ready, make a PR against `dev` branch
+- Tag @its-leofisher as reviewer and update the ticket for visibility
+
+Remember not all contributions will be accepted, it depends on the scope of the project, there will be some back and forth as with all contributions.
+
+### Support Development
 <a href="https://www.buymeacoffee.com/leoeff"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee||tea||books&emoji=🌞&slug=leoeff&button_colour=FFDD00&font_colour=000000&font_family=Bree&outline_colour=000000&coffee_colour=ffffff" /></a>
 
