@@ -5,6 +5,7 @@ from kasa import SmartBulb
 from utils import rgb_to_hsv, discover_and_cache_devices, load_cached_device, retrieve_primary_device
 import os
 from dotenv import load_dotenv
+from flask_cors import CORS
 
 load_dotenv()
 
@@ -17,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 TARGET_BULB_ALIAS = retrieve_primary_device()
 SLACK_ALLOWED_CHANNELS = {'CHANNEL_IDS'}
+cors = CORS(app, resources={r"/v1/*": {"origins": "*"}})
 
 async def set_bulb_color(bulb, hex_color, duration=None, blink=False):
     red, green, blue = int(hex_color[1:3], 16), int(hex_color[3:5], 16), int(hex_color[5:7], 16)
