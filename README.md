@@ -79,10 +79,10 @@ python3 setup.py
 
 ## Step 3: Run Flask Application
 
-### 3.1 Run Flask Application in Dev Mode
+### 3.1 Run Flask Application
 
 ```sh
-python app.py
+gunicorn -w 2 -b 127.0.0.1:8000 app:app
 ```
 
 ### 3.2 Start Ngrok
@@ -117,15 +117,15 @@ When you're ready to leave the application running in the background permanently
 
 ### TMUX: Start App and NGROK
 
-SSH into the raspberry pi. Start App using tmux to run app in background
+SSH into Pi. Start App with tmux command below to run app through gunicorn in background
 
 `tmux new-session -d -s appsession "source <path_to_project>/venv/bin/activate && cd <path_to_project> && gunicorn -w 2 -b 127.0.0.1:8000 app:app"`
 
-### Start NGROK
+### Start app server and tunnel via NGROK
 
-Running Ngrok and Detach Automatically
+Run Ngrok then Detach Automatically
 
-`tmux new-session -d -s ngroksession 'gunicorn -w 2 -k uvicorn.workers.UvicornWorker app:app -b 127.0.0.1:8000'`
+`tmux new-session -d -s ngroksession "ngrok http 8000 --domain=YOUR-DOMAIN.ngrok-free.app`
 
 ### It's Ready!
 

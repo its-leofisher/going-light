@@ -64,7 +64,7 @@ async def handle_message_event(event):
                 'in progress': ('#FFFF00', True, 25),
                 'in process': ('#FFFF00', True, 25),
                 'processing': ('#FFFF00', True, 25),
-                'success': ('#5C214A', False, 35),
+                'success': ('#49e048', False, 35),
                 'off': ('', None, None),  # Special case to handle power off
                 'on': ('', None, None),  # Special case to handle power on
                 'orange': ('#FFA500', False, None),
