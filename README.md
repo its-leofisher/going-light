@@ -112,9 +112,6 @@ curl -X POST https://your_ngrok_url_here.app/v1/events \
 }'
 ```
 
-#### More Integrations
- - More integrations coming soon.
-
 ## Production Steps
 When you're ready to leave the application running in the background permanently we will use GUNICORN to serve the app. SSH into the Pi and run these TMUX commands:
 
@@ -163,6 +160,14 @@ Message in payload: Color Mapping
 }
 ```
 
+#### Planned Integrations
+ - Client: OctoPrint Plugin
+ - Client: Zoom Plugin
+ - Client: Going Light Slack App
+ - Source: Philips Hue and LED Strips
+ - Source: Kasa Switches and LED Strips
+ - Source: Homeassistant
+ - 
 ### Contribute
 Open to code contributions, bug reports, and new ideas
 
