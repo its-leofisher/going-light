@@ -1,5 +1,7 @@
 # Overview
 
+> ❗ This software is in alpha so please be EXTRA cautious about exposing endpoints to public.  At minimum use [Ngrok](https://ngrok.com/pricing).  We will be providing better instructions soon.
+
 Welcome! Going Light is meant to be used as a status indicator through light, receiving a message with a keyword from a service and triggering a Smart Bulb to notify you...one less message to read and dashboard/screen to context switch to.
 
 The meanings of the lights can be changed to represent different events and statuses.  Essentially, the project is used to facilitate communication through light.  This means that the devices need to have the ability to change colors and be dimmable.
